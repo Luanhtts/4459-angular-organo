@@ -26,31 +26,15 @@ import { LivroService } from '../../services/livro.service';
 export class ListaLivrosComponent implements OnInit {
   generosComLivros: { genero: GeneroLiterario; livros: Livro[] }[] = [];
 
-  livros: Livro[] = [];
-
   constructor(private livroService: LivroService) { }
-
-  generos: GeneroLiterario[] = [
-    { id: 'romance', value: 'Romance' },
-    { id: 'misterio', value: 'Mistério' },
-    { id: 'fantasia', value: 'Fantasia' },
-    { id: 'ficcao-cientifica', value: 'Ficção Científica' },
-    { id: 'tecnicos', value: 'Técnicos' }
-  ];
 
 
   ngOnInit() {
-    this.livroService.obterLivros().subscribe((livros: Livro[]) => {
-      this.livros = livros;
-      console.log(this.livros)
-      // this.organizarLivrosPorGenero();
+    this.livroService.organizarLivrosPorGenero().subscribe((livrosPorGenero) => {
+     this.generosComLivros = this.livroService.generos.map((genero) => ({
+      genero,
+      livros: livrosPorGenero.get(genero.id) ?? []
+    }));
     });
   }
-
-  // organizarLivrosPorGenero() {
-  //   this.generosComLivros = this.generos.map((genero) => ({
-  //     genero,
-  //     livros: this.livros.filter((livro) => livro.genero.id === genero.id)
-  //   }));
-  // }
 }

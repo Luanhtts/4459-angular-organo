@@ -1,4 +1,5 @@
-import { Component, forwardRef, input } from '@angular/core';
+import { LivroService } from './../../services/livro.service';
+import { Component, forwardRef, input, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
@@ -17,16 +18,16 @@ import { GeneroLiterario } from '../livro/livro';
     },
   ],
 })
-export class ListaSuspensaComponent implements ControlValueAccessor {
+export class ListaSuspensaComponent implements ControlValueAccessor, OnInit {
   label = input<string>();
   id = input<string>();
-  opcoes: GeneroLiterario[] = [
-      { id: 'romance', value: 'Romance' },
-      { id: 'misterio', value: 'Mistério' },
-      { id: 'fantasia', value: 'Fantasia' },
-      { id: 'ficcao-cientifica', value: 'Ficção Científica' },
-      { id: 'tecnicos', value: 'Técnicos' }
-  ];
+  opcoes: GeneroLiterario[] = [];
+
+  constructor(private LivroService: LivroService) {}
+
+  ngOnInit() {
+    this.opcoes = this.LivroService.generos;
+  }
 
   private innerValue: any;
 
